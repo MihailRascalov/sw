@@ -2,7 +2,7 @@
 
 int main()
 {
-    printf("%d", GetKBit(8, 3)); // 8 w systemie dwójkowym to 1000, więc pierwszy bit jest
+    printf("%d", GetKBit(8, 3)); // 8 w systemie dwójkowym to 1000, więc trzeci bit jest
     // równy 1 co zwraca poniższa funkcja
 }
 

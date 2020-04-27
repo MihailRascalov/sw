@@ -2,7 +2,7 @@
 
 int main()
 {
-    GoldGenerator();
+    GoldGenerator(); // wywołanie funkcji bez argumentów
 }
 
 GoldGenerator()
@@ -14,7 +14,8 @@ GoldGenerator()
     int highestBitNumber = 6; // najstarszy bit czyli pierwszy od lewej
     int numberOfIteration = 128; // ilość cykli, którą wykonają generatory
 
-    printf("%d\n", (numberOne & 1) ^ (numberTwo & 1));
+    printf("%d\n", (numberOne & 1) ^ (numberTwo & 1)); // wyświetlenie wyniku operacji 
+    // XOR dla dwóch najmłodszych bitów z liczb numberOne i numberTwo
     int counter = 0; // licznik odpowiedzialny za zliczanie wykonanych cykli generatora
     do
     {
@@ -23,15 +24,16 @@ GoldGenerator()
         for(int j = 0; j < highestBitNumber; j++) // służy do przejściu po binarnym zapisie seeda
         {
             if((seedOne>>j) & 1) // szukanie 1 w pierwszym seedzie
-                tmpOne = tmpOne ^ ((numberOne>>j) & 1); // w przypadku znalezienia poprzednia wartość tmp 
-                // jest xorowana z odpowiednim bitem z pierwszej liczby i przypisywana do tmpOne
+                tmpOne = tmpOne ^ ((numberOne>>j) & 1); // w przypadku znalezienia poprzednia 
+                // wartość tmpOne ^ z odpowiednim bitem z numberOne i przypisywana do tmpOne
             if((seedTwo>>j) & 1) // szukanie 1 w drugim seedzie
-                tmpTwo = tmpTwo ^ ((numberTwo>>j) & 1); // w przypadku znalezienia poprzednia wartość tmp 
-                // jest xorowana z odpowiednim bitem z drugiej liczby i przypisywana do tmpTwo
+                tmpTwo = tmpTwo ^ ((numberTwo>>j) & 1); // w przypadku znalezienia poprzednia
+                // wartość tmpTwo ^ z odpowiednim bitem z numberTwo i przypisywana do tmpTwo
         }
         numberOne = (numberOne | (tmpOne<<highestBitNumber))>>1; // ustalenie nowej wartości numberOne
         numberTwo = (numberTwo | (tmpTwo<<highestBitNumber))>>1; // ustalenie nowej wartości numberTwo
-        printf("%d\n", (numberOne & 1) ^ (numberTwo & 1)); // wyświetlenie operacji XOR najmodszego bitu numberOne i numberTwo
+        printf("%d\n", (numberOne & 1) ^ (numberTwo & 1)); // wyświetlenie operacji XOR najmodszego 
+        // bitu numberOne i numberTwo
         counter++; // zwiększenie licznika o jeden
     }
     while(counter < numberOfIteration); // warunek kończący działanie pętli
