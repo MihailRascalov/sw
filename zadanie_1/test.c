@@ -21,10 +21,15 @@ void Slow()
         {}
 }
 
+unsigned char IntToGray(unsigned char input)
+{
+    return input ^ (input >> 1);
+}
+
 int main(void)
 {
-unsigned long i;
 unsigned char display=0;
+unsigned char counter = 0;
 
 binaryCounterUp_1:
     while( !_kbhit() )
@@ -52,7 +57,10 @@ binaryCounterDown_2:
     }
     int b = _getch();
     if(b == 72) // up
+    {
+        counter = 0;
         goto binaryGrayCounterUp_3;
+    }
     if(b == 80) // down
         goto binaryCounterUp_1;
     goto binaryCounterDown_2;
@@ -60,27 +68,100 @@ binaryCounterDown_2:
 binaryGrayCounterUp_3:
     while( !_kbhit() )
     {
-        printf("\r");
-        printf("binaryGrayCounterUp_3 no implementation");
-        Slow();
-        goto binaryGrayCounterUp_3;
+       display = IntToGray(counter);
+       printf("\r");
+       IntToBinary(display);
+       Slow();
+       counter ++;
     }
-    int d = _getch();
-    if(d == 72) // up
+    int c = _getch();
+    if(c == 72) // up
         goto binaryGrayCounterDown_4;
-    if(d == 80) // down
+    if(c == 80) // down
+    {
+        display=0;
         goto binaryCounterDown_2;
+    }
     goto binaryGrayCounterUp_3;
 
 binaryGrayCounterDown_4:
-    printf("\r");
-    printf("binaryGrayCounterDown_4 no implementation");
-    return 0;
+    while( !_kbhit() )
+    {
+       display = IntToGray(counter);
+       printf("\r");
+       IntToBinary(display);
+       Slow();
+       counter --;
+    }
+    int d = _getch();
+    if(d == 72) // up
+        goto BCDounterUp_5;
+    if(d == 80) // down
+        goto binaryGrayCounterUp_3;
+    goto binaryGrayCounterDown_4;
+
+BCDounterUp_5:
+    while( !_kbhit() )
+    {
+        printf("\r");
+        printf("BCDounterUp_5 no implementation");
+        Slow();
+        goto BCDounterUp_5;
+    }
+    int e = _getch();
+    if(e == 72) // up
+        goto BCDounterDown_6;
+    if(e == 80) // down
+        {
+            counter=0;
+            goto binaryGrayCounterDown_4;
+        }
+    goto BCDounterUp_5;
+
+BCDounterDown_6:
+    while( !_kbhit() )
+    {
+        printf("\r");
+        printf("BCDounterDown_6 no implementation");
+        Slow();
+        goto BCDounterDown_6;
+    }
+    int f = _getch();
+    if(f == 72) // up
+        goto ThreeBitSnake_7;
+    if(f == 80) // down
+        goto BCDounterUp_5;
+    goto BCDounterDown_6;
+
+ThreeBitSnake_7:
+    while( !_kbhit() )
+    {
+        printf("\r");
+        printf("3BitSnake_7 no implementation");
+        Slow();
+        goto ThreeBitSnake_7;
+    }
+    int g = _getch();
+    if(g == 72) // up
+        goto queue_8;
+    if(g == 80) // down
+        goto BCDounterDown_6;
+    goto ThreeBitSnake_7;
 
 queue_8:
-    printf("\r");
-    printf("queue no implementation");
-    return 0;
+    while( !_kbhit() )
+    {
+        printf("\r");
+        printf("queue_8 no implementation");
+        Slow();
+        goto queue_8;
+    }
+    int h = _getch();
+    if(h == 72) // up
+        goto pseudoRandomNumberGenerator_9;
+    if(h == 80) // down
+        goto ThreeBitSnake_7;
+    goto queue_8;
 
 pseudoRandomNumberGenerator_9:
     while( !_kbhit() )
@@ -113,14 +194,13 @@ pseudoRandomNumberGenerator_9:
         while( !_kbhit() ); // moment, w którym generator dotarł do liczby początkowej
         // goto pseudoRandomNumberGenerator_9;
     }
-    int c = _getch();
-    if(c == 72) // up
+    int i = _getch();
+    if(i == 72) // up
     {
         display=0;
         goto binaryCounterUp_1;
     }
-        
-    if(c == 80) // down
+    if(i == 80) // down
         goto queue_8;    
     goto pseudoRandomNumberGenerator_9;
     //goto queue_8;
