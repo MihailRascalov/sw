@@ -17,7 +17,7 @@ void Slow()
 {
     int c,d = 0;
     for (c = 1; c <= 32767; c++)
-        for (d = 1; d <= 8192; d++)
+        for (d = 1; d <= 16384; d++)
         {}
 }
 
@@ -26,16 +26,23 @@ unsigned char IntToGray(unsigned char input)
     return input ^ (input >> 1);
 }
 
+unsigned char IntToBCD(unsigned char input)
+{
+    return ((input / 10) << 4) | (input % 10);
+}
+
 int main(void)
 {
 unsigned char display=0;
 unsigned char counter = 0;
+unsigned char counterBCD = 0;
 
 binaryCounterUp_1:
     while( !_kbhit() )
     {
         printf("\r                        ");
         printf("\r");
+        printf("8 bitowy licznik binarny zliczajacy w gore: ");
         IntToBinary(display);
         Slow();
         display ++;
@@ -51,6 +58,7 @@ binaryCounterDown_2:
     while( !_kbhit() )
     {
         printf("\r");
+        printf("8 bitowy licznik binarny zliczajacy w dol: ");
         IntToBinary(display);
         Slow();
         display --;
@@ -70,6 +78,7 @@ binaryGrayCounterUp_3:
     {
        display = IntToGray(counter);
        printf("\r");
+       printf("8 bitowy licznik w kodzie Graya zliczajacy w gore: ");
        IntToBinary(display);
        Slow();
        counter ++;
@@ -89,13 +98,17 @@ binaryGrayCounterDown_4:
     {
        display = IntToGray(counter);
        printf("\r");
+       printf("8 bitowy licznik w kodzie Graya zliczajacy w dol: ");
        IntToBinary(display);
        Slow();
        counter --;
     }
     int d = _getch();
     if(d == 72) // up
-        goto BCDounterUp_5;
+        {
+            counterBCD = 0;
+            goto BCDounterUp_5;
+        }
     if(d == 80) // down
         goto binaryGrayCounterUp_3;
     goto binaryGrayCounterDown_4;
@@ -103,10 +116,14 @@ binaryGrayCounterDown_4:
 BCDounterUp_5:
     while( !_kbhit() )
     {
-        printf("\r");
-        printf("BCDounterUp_5 no implementation");
+        if(counterBCD > 99)
+            counterBCD = 0;
+        display = IntToBCD(counterBCD);
+        printf("\r %d ", counterBCD);
+        printf("2x4 bitowy licznik w kodzie BCD zliczający w gore: ");
+        IntToBinary(display);
         Slow();
-        goto BCDounterUp_5;
+        counterBCD++;
     }
     int e = _getch();
     if(e == 72) // up
@@ -121,10 +138,14 @@ BCDounterUp_5:
 BCDounterDown_6:
     while( !_kbhit() )
     {
-        printf("\r");
-        printf("BCDounterDown_6 no implementation");
+        if(counterBCD > 99)
+            counterBCD = 99;
+        display = IntToBCD(counterBCD);
+        printf("\r %d ", counterBCD);
+        printf("2x4 bitowy licznik w kodzie BCD zliczajacy w doł: ");
+        IntToBinary(display);
         Slow();
-        goto BCDounterDown_6;
+        counterBCD--;
     }
     int f = _getch();
     if(f == 72) // up
@@ -136,25 +157,69 @@ BCDounterDown_6:
 ThreeBitSnake_7:
     while( !_kbhit() )
     {
-        printf("\r");
-        printf("3BitSnake_7 no implementation");
-        Slow();
-        goto ThreeBitSnake_7;
+        for(int i=0; i<6; i++)
+        {   
+            if( !_kbhit() )
+            {
+                printf("\r                        ");
+                printf("\r");
+                printf("3 bitowy wezyk poruszajacy sie lewo-prawo: ");
+                IntToBinary(7 << i);
+                Slow();
+            }
+            else
+                break;
+        }
+        for(int i=1; i<5; i++)
+        {
+            if( !_kbhit() )
+            {
+                printf("\r");
+                printf("3 bitowy wezyk poruszajacy sie lewo-prawo: ");
+                IntToBinary(224 >> i);
+                Slow();
+            }
+            else
+                break;
+        }
     }
     int g = _getch();
     if(g == 72) // up
         goto queue_8;
     if(g == 80) // down
+    {
+        counterBCD = 0;
         goto BCDounterDown_6;
+    }
     goto ThreeBitSnake_7;
 
 queue_8:
     while( !_kbhit() )
     {
-        printf("\r");
-        printf("queue_8 no implementation");
-        Slow();
-        goto queue_8;
+        int number = 1;
+        int tmp;
+        int lastNumer;
+        int ones = 0;
+        for(int i=8; i>0; i--)
+        {
+            for(int j=0; j<i; j++)
+            {
+                if( !_kbhit() )
+                {
+                    printf("\r                        ");
+                    printf("\r");
+                    printf("Kolejka: ");
+                    IntToBinary((number << j) | ones);
+                    Slow();
+                    tmp = j;       
+                }
+            }
+            if( !_kbhit() )
+            {
+                lastNumer = number << tmp;
+                ones = ones | lastNumer;
+            }
+        }
     }
     int h = _getch();
     if(h == 72) // up
@@ -171,6 +236,7 @@ pseudoRandomNumberGenerator_9:
         int highestBitNumber = 6; // najstarszy bit czyli pierwszy od lewej
         
         printf("\r");
+        printf("6 bitowy generator liczb pseudolosowych: ");
         for(int i = highestBitNumber-1; i >= 0; i--) // służy do przejścia po binarnym zapisie 1
                 printf("%d", (number>>i) & 1); // wyświetlenie wszystkich bitów poczynając od 
                                                 // lewej strony
