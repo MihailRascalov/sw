@@ -257,3 +257,30 @@ void main(void)
                 delay(500); // opóźnienie
             }
             goto PierwszyGracz; // przejście do pierwszego gracza
+        }
+    
+    PierwszyGracz: // etykieta wskazująca pierwszego gracza
+        while(1)
+        {
+            while(PORTBbits.RB3 != 0) // pierwszy gracz
+            {
+                przygotujEkran(); // przygotowanie ekranu
+                lcd_str(obliczCzas(czasPierwszegoGracza, czasDrugiegoGracza)); // wyswietlenie aktualnego stanu odliczania
+                lcd_cmd(L_L2); // przejscie do drugiej linii
+                lcd_str("MOVE        STOP"); // stan oczekiwania na wykonanie ruchu
+                if(czasPierwszegoGracza>0) // odejmowanie sekund
+                    czasPierwszegoGracza -= 1; // po uplywie 1 sekundy -1
+                else
+                    goto Komunikat; // wyświetlenie komunikatu o przegranej
+                delay(500); // opóźnienie
+            }
+            goto DrugiGracz; // przejście do drugiego gracza
+        }
+    
+    Komunikat: // etykieta komunikatu
+        lcd_cmd(L_L2); // przejscie do drugiej linii
+        lcd_str("TIME OUT = LOST "); // komunikat oświadczający przegraną
+        delay(1000); // opóźnienie
+        goto Start; // przejście do początku programu
+    return;
+}
