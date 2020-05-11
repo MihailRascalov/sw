@@ -174,9 +174,11 @@ int timeFromPotentiometer(int x) // funkcja służy do generowania czasu w zale�
 char * obliczCzas(int sekundy, int sekundy2) // funkcja zwraca ciag znakow, ktory posluzy do wyswietlenia
 {
     char tablica[16]; // przechowuje ciag znakow do wyswietlenia
+    int h = (sekundy/3600); // obliczanie godzin
     int m = (sekundy -(3600*h))/60; // obliczanie minut
     int s = (sekundy -(3600*h)-(m*60)); // obliczanie sekund
     
+    int h2 = (sekundy2/3600); // obliczanie godzin
     int m2 = (sekundy2 -(3600*h2))/60; // obliczanie minut
     int s2 = (sekundy2 -(3600*h2)-(m2*60)); // obliczanie sekund
     
@@ -255,30 +257,3 @@ void main(void)
                 delay(500); // opóźnienie
             }
             goto PierwszyGracz; // przejście do pierwszego gracza
-        }
-    
-    PierwszyGracz: // etykieta wskazująca pierwszego gracza
-        while(1)
-        {
-            while(PORTBbits.RB3 != 0) // pierwszy gracz
-            {
-                przygotujEkran(); // przygotowanie ekranu
-                lcd_str(obliczCzas(czasPierwszegoGracza, czasDrugiegoGracza)); // wyswietlenie aktualnego stanu odliczania
-                lcd_cmd(L_L2); // przejscie do drugiej linii
-                lcd_str("MOVE        STOP"); // stan oczekiwania na wykonanie ruchu
-                if(czasPierwszegoGracza>0) // odejmowanie sekund
-                    czasPierwszegoGracza -= 1; // po uplywie 1 sekundy -1
-                else
-                    goto Komunikat; // wyświetlenie komunikatu o przegranej
-                delay(500); // opóźnienie
-            }
-            goto DrugiGracz; // przejście do drugiego gracza
-        }
-    
-    Komunikat: // etykieta komunikatu
-        lcd_cmd(L_L2); // przejscie do drugiej linii
-        lcd_str("TIME OUT = LOST "); // komunikat oświadczający przegraną
-        delay(1000); // opóźnienie
-        goto Start; // przejście do początku programu
-    return;
-}
